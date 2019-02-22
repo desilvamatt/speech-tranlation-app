@@ -25,19 +25,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#f5f5f5"
+        android:background="#ffffff"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="20dp">
 
         <ImageButton
             android:id="@+id/btnSpeak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="198dp"
+            android:layout_height="196dp"
             android:background="@null"
             android:padding="16dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ico_mic" />
+            android:src="@drawable/bubble" />
 
         <TextView
             android:id="@+id/textView"
