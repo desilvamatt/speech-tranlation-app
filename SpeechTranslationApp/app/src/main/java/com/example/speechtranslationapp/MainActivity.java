@@ -28,31 +28,30 @@ import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
-
-    private TextView txtSpeechInput;
-    private ImageButton btnSpeak;
+    // Mapping components
+    private TextView ttsInput;
+    private ImageButton speakButton;
     private TextToSpeech tts;
     private final int REQ_CODE_SPEECH_INPUT = 100;
-
+    // Define URL for HTTP GET volley
     private final String requestURL = "https://www.googleapis.com/language/translate/v2?key=";
-    //TODO Add your own key
+    // TODO Add your own key - Mine is removed
     private final String requestKey = "\n";
     private final String requestSrc = "&source=";
     private final String requestDst = "&target=";
     private final String requestTxt = "&q=";
     private final String formatTxt = "&format=text";
 
-
-
+    // onCreate method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        txtSpeechInput = (TextView) findViewById(R.id.voiceInput);
+        ttsInput = findViewById(R.id.voiceInput);
         tts = new TextToSpeech(this, this);
-        btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-        btnSpeak.setOnClickListener(new View.OnClickListener() {
-
+        speakButton = findViewById(R.id.btnSpeak);
+        speakButton.setOnClickListener(new View.OnClickListener() {
+            // instantiate speech prompt
             @Override
             public void onClick(View v) {
                 promptSpeechInput();
@@ -61,10 +60,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     }
 
-
-    /**
-     * Showing google speech input dialog
-     * */
+    // Prompt for speech, uses recognizer intent from android.speech
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -81,9 +77,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
     }
 
-    /**
-     * Receiving speech input
-     * */
+    // Receiving text speech input, call on get translation
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -102,15 +96,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     }
 
-
-
+    // Initiate speech synthesis and playback
     private void speak(String text){
-        Locale aLocale = new Locale("fr","FR");
+        Locale aLocale = new Locale("fr","CA");
         tts.setLanguage(aLocale);
         tts.speak(text,TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
-    //TODO
+    // request translation from Google Cloud Translation API.
+    // Since not compatible, need to volley HTTP GET request
+    // Returned JSON object is parsed to get translated text
     public void getTranslation( String txt, String src, String dst ){
         String request = requestURL + requestKey + requestSrc + src + requestDst + dst+ formatTxt + requestTxt + txt;
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -125,42 +120,32 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                         JSONObject test = null;
                         try {
                             test = response.getJSONObject("data");
-                            txtSpeechInput.setText(test.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        JSONArray translations = null;
-                        try {
+                            ttsInput.setText(test.toString());
+                            JSONArray translations = null;
                             translations = test.getJSONArray("translations");
-                            txtSpeechInput.setText(translations.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        try {
+                            ttsInput.setText(translations.toString());
                             JSONObject translated_text = translations.getJSONObject(0);
                             String final_translation = translated_text.getString("translatedText");
-                            txtSpeechInput.setText(final_translation);
-                            String translated = txtSpeechInput.getText().toString().trim();
+                            ttsInput.setText(final_translation);
+                            String translated = ttsInput.getText().toString().trim();
                             speak(translated);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 },
                 new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", "nope");
+                        Log.d("Error.Response", "Error communicating");
                     }
                 }
         );
         queue.add(getRequest);
     }
 
-
-
+    // onInit method, implement tts listener interface method, initialize default tts engine
     @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
@@ -176,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
     }
 
+    // onDestroy method, stop and shutdown tts engine
     @Override
     public void onDestroy() {
         if (tts != null) {

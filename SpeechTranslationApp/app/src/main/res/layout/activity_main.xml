@@ -7,11 +7,10 @@
     tools:context="com.example.speechtranslationapp.MainActivity">
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btnSpeakContainer"
+        android:layout_width="match_parent"
+        android:layout_height="219dp"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="20dp"
+        android:fillViewport="true"
         android:padding="20dp">
 
         <TextView
@@ -23,21 +22,21 @@
     <LinearLayout
         android:id="@+id/btnSpeakContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="512dp"
         android:layout_alignParentBottom="true"
-        android:background="#ffffff"
+        android:background="@color/colorPrimary"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="20dp">
 
         <ImageButton
             android:id="@+id/btnSpeak"
-            android:layout_width="198dp"
-            android:layout_height="196dp"
+            android:layout_width="298dp"
+            android:layout_height="362dp"
             android:background="@null"
             android:padding="16dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/bubble" />
+            android:src="@drawable/flags2" />
 
         <TextView
             android:id="@+id/textView"
@@ -45,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/btnSpeak"
             android:layout_margin="10dp"
-            android:text="@string/press_button" />
+            android:text="@string/press_button"
+            android:textColor="@android:color/background_light" />
     </LinearLayout>
 </RelativeLayout>
