@@ -13,5 +13,6 @@ Since the Cloud Java client libraries do not currently support Android, the tran
 * Wait for the response
 
 ## Application
-![Default](/public/Default.jpg)
-![Example](/public/Example.jpg)
+Before Speech Input            |  After Speech Input
+:-------------------------:|:-------------------------:
+![Default](/public/Default.jpg)  |  ![Example](/public/Example.jpg)
